@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script>
+
+
     class Producto {
         static contadorProductos = 0;
         constructor(nombre, precio, categoria, imagen) {
@@ -83,7 +76,3 @@
     document.getElementById("producto1").addEventListener("click", () => agregarAlCarrito(producto1));
     document.getElementById("producto2").addEventListener("click", () => agregarAlCarrito(producto2));
     document.getElementById("producto3").addEventListener("click", () => agregarAlCarrito(producto3));
-</script>
-        
-</body>
-</html>
