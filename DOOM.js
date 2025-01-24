@@ -1,12 +1,12 @@
 
-        // Lista de libros
+        // Listamos los librs
         const libros = [
             { id: 1, titulo: "Blancanieves", autor: "José Mauro de Vasconcelos", genero: "Novela", disponible: true },
             { id: 2, titulo: "La casa de papel", autor: "Álex Pina", genero: "Serie", disponible: true },
             { id: 3, titulo: "El señor de los anillos", autor: "J.R.R. Tolkien", genero: "Fantasía", disponible: true }
         ];
 
-        // Lista de libros prestados
+        // Creamos un arreglo de libros prestados
         let librosPrestados = [];
 
         // Función para mostrar los libros disponibles
@@ -26,32 +26,31 @@
             });
         }
 
-        // Función para reservar un libro
+        // Funcion para la reserva del libro
         function reservarLibro(id) {
-            const libro = libros.find(libro => libro.id === id);
+            const libro = libros.find(libro => libro.id === id); //Implementamos la funcion id para encontrar el libro segun el ID
             if (libro && libro.disponible) {
                 libro.disponible = false;
-                librosPrestados.push(libro);
+                librosPrestados.push(libro); //Aqui agregamos el libro
                 mostrarLibrosDisponibles();
                 mostrarLibrosPrestados();
                 enviarNotificacionReserva(libro);
-                setTimeout(() => devolverLibro(id), 5000); // Simulación de tiempo de devolución (5 segundos)
+                setTimeout(() => devolverLibro(id), 5000); // Aqwi implementamos el metodo setTimeOut
             }
         }
 
-        // Función para devolver un libro
+        // Aqui devolvemos el libro
         function devolverLibro(id) {
             const libro = librosPrestados.find(libro => libro.id === id);
             if (libro) {
                 libro.disponible = true;
-                librosPrestados = librosPrestados.filter(libro => libro.id !== id);
+                librosPrestados = librosPrestados.filter(libro => libro.id !== id); 
                 mostrarLibrosDisponibles();
                 mostrarLibrosPrestados();
                 enviarNotificacionDevolucion(libro);
             }
         }
-
-        // Función para mostrar los libros prestados
+        // Función para mostrar las listas de libros prestados
         function mostrarLibrosPrestados() {
             const list = document.getElementById('borrowedBooksList');
             list.innerHTML = ''; // Limpiar la lista
@@ -67,25 +66,24 @@
             });
         }
 
-        // Función para enviar notificación de reserva
         function enviarNotificacionReserva(libro) {
             const notifications = document.getElementById('notifications');
-            notifications.innerHTML = `¡Reserva exitosa! El libro "${libro.titulo}" ha sido reservado.`;
+            notifications.innerHTML = `Reserva exitosa  del libro: "${libro.titulo}"`;
         }
 
-        // Función para enviar notificación de devolución
+        // En estaaa función para enviar notificación de devolución
         function enviarNotificacionDevolucion(libro) {
             const notifications = document.getElementById('notifications');
-            notifications.innerHTML = `¡Devolución exitosa! El libro "${libro.titulo}" ha sido devuelto.`;
+            notifications.innerHTML = `El libro "${libro.titulo}" ha sido devuelto.`;
         }
 
         // Función de filtrado de libros
         function filtrarLibros() {
-            const searchInput = document.getElementById('searchInput').value;
+            const buscar = document.getElementById('buscar').value;
             const librosFiltrados = libros.filter(libro => 
-                libro.titulo === searchInput || 
-                libro.autor === searchInput ||
-                libro.genero === searchInput
+                libro.titulo === buscar || 
+                libro.autor === buscar ||
+                libro.genero === buscar
             );
 
             const list = document.getElementById('availableBooksList');
@@ -103,5 +101,6 @@
             });
         }
 
-        // Inicializar la lista de libros disponibles
+        // Inicializamos la lista de libros disponibles en el html
         mostrarLibrosDisponibles();
+
