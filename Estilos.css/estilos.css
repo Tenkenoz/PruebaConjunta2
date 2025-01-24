@@ -1,0 +1,36 @@
+body{
+    margin: 0px;
+    background-color: aqua;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: blue;
+    justify-content: center;
+    height: 50px;
+}
+nav{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   width: 30%;
+
+}
+section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    text-align: center;
+    padding: 10px;
+}
+section img{
+    width: 100px;
+    height: 200px;
+}
+section div{
+    background-color: yellow;
+    width: 25%;
+    margin: 2%;
+}
