@@ -1,78 +1,107 @@
 
+        // Lista de libros
+        const libros = [
+            { id: 1, titulo: "Blancanieves", autor: "José Mauro de Vasconcelos", genero: "Novela", disponible: true },
+            { id: 2, titulo: "La casa de papel", autor: "Álex Pina", genero: "Serie", disponible: true },
+            { id: 3, titulo: "El señor de los anillos", autor: "J.R.R. Tolkien", genero: "Fantasía", disponible: true }
+        ];
 
-    class Producto {
-        static contadorProductos = 0;
-        constructor(nombre, precio, categoria, imagen) {
-            this.nombre = nombre;
-            this.precio = precio;
-            this.categoria = categoria;
-            this.imagen = imagen;
-            this.id = ++Producto.contadorProductos;
-        }
-        toString() {
-            return `Nombre: ${this.nombre}, Precio: $${this.precio.toFixed(2)}, Categoría: ${this.categoria}`;
-        }
-        }
-    
+        // Lista de libros prestados
+        let librosPrestados = [];
 
-    class Carrito {
-        constructor() {
-            this.productos = [];
-        }
+        // Función para mostrar los libros disponibles
+        function mostrarLibrosDisponibles() {
+            const list = document.getElementById('availableBooksList');
+            list.innerHTML = ''; // Limpiar la lista
 
-        agregar(producto) {
-            this.productos.push(producto);
-        }
-
-        get mostrartotal() {
-            return this.productos.reduce((acc, producto) => {
-                let precioFinal = producto.categoria === "Electrónica" 
-                    ? producto.precio * 0.9 
-                    : producto.precio;
-                return acc + precioFinal;
-            }, 0);
+            libros.filter(libro => libro.disponible).forEach(libro => {
+                list.innerHTML += `
+                    <li>
+                        <strong>${libro.titulo}</strong><br>
+                        Autor: ${libro.autor}<br>
+                        Género: ${libro.genero}
+                        <button onclick="reservarLibro(${libro.id})">Reservar</button>
+                    </li>
+                `;
+            });
         }
 
-        get resumen() {
-            let text = this.productos.map(producto => producto.toString()).join("<br>");
-            let descuentoAplicado = this.productos.filter(p => p.categoria === "Electrónica").length;
-            text += `<br>Total: $${this.mostrartotal.toFixed(2)}`;
-            text += `<br>Aplicado descuento a ${descuentoAplicado} producto(s)`;
-            return text;
+        // Función para reservar un libro
+        function reservarLibro(id) {
+            const libro = libros.find(libro => libro.id === id);
+            if (libro && libro.disponible) {
+                libro.disponible = false;
+                librosPrestados.push(libro);
+                mostrarLibrosDisponibles();
+                mostrarLibrosPrestados();
+                enviarNotificacionReserva(libro);
+                setTimeout(() => devolverLibro(id), 5000); // Simulación de tiempo de devolución (5 segundos)
+            }
         }
-    }
 
-    const carrito = new Carrito();
-    const resumenDiv = document.getElementById("resumen");
+        // Función para devolver un libro
+        function devolverLibro(id) {
+            const libro = librosPrestados.find(libro => libro.id === id);
+            if (libro) {
+                libro.disponible = true;
+                librosPrestados = librosPrestados.filter(libro => libro.id !== id);
+                mostrarLibrosDisponibles();
+                mostrarLibrosPrestados();
+                enviarNotificacionDevolucion(libro);
+            }
+        }
 
-    function agregarAlCarrito(elemento) {
-        let nombre = elemento.querySelector(".titulo").innerText;
-        let precio = parseFloat(elemento.querySelector(".precio").innerText.replace("$", ""));
-        let categoria = elemento.querySelector(".categoria").innerText;
-        let imagen = elemento.querySelector("img").src;
+        // Función para mostrar los libros prestados
+        function mostrarLibrosPrestados() {
+            const list = document.getElementById('borrowedBooksList');
+            list.innerHTML = ''; // Limpiar la lista
 
-        let producto = new Producto(nombre, precio, categoria, imagen);
-        carrito.agregar(producto);
+            librosPrestados.forEach(libro => {
+                list.innerHTML += `
+                    <li>
+                        <strong>${libro.titulo}</strong><br>
+                        Autor: ${libro.autor}<br>
+                        Fecha de devolución: ${new Date().toLocaleString()}
+                    </li>
+                `;
+            });
+        }
 
-        actualizarResumen(producto);
-    }
+        // Función para enviar notificación de reserva
+        function enviarNotificacionReserva(libro) {
+            const notifications = document.getElementById('notifications');
+            notifications.innerHTML = `¡Reserva exitosa! El libro "${libro.titulo}" ha sido reservado.`;
+        }
 
-    function actualizarResumen(producto) {
-        let productoDiv = document.createElement("div");
-        productoDiv.innerHTML = `
-            <h2>${producto.nombre}</h2>
-            <img height="50px" src="${producto.imagen}" alt="${producto.nombre}">
-            <p>Precio: $${producto.precio.toFixed(2)}</p>
-            <p>Categoría: ${producto.categoria}</p>
-        `;
-        resumenDiv.appendChild(productoDiv);
+        // Función para enviar notificación de devolución
+        function enviarNotificacionDevolucion(libro) {
+            const notifications = document.getElementById('notifications');
+            notifications.innerHTML = `¡Devolución exitosa! El libro "${libro.titulo}" ha sido devuelto.`;
+        }
 
-        let totalResumen = document.createElement("p");
-        totalResumen.innerHTML = carrito.resumen;
-        resumenDiv.innerHTML = "";
-        resumenDiv.appendChild(totalResumen);
-    }
+        // Función de filtrado de libros
+        function filtrarLibros() {
+            const searchInput = document.getElementById('searchInput').value;
+            const librosFiltrados = libros.filter(libro => 
+                libro.titulo === searchInput || 
+                libro.autor === searchInput ||
+                libro.genero === searchInput
+            );
 
-    document.getElementById("producto1").addEventListener("click", () => agregarAlCarrito(producto1));
-    document.getElementById("producto2").addEventListener("click", () => agregarAlCarrito(producto2));
-    document.getElementById("producto3").addEventListener("click", () => agregarAlCarrito(producto3));
+            const list = document.getElementById('availableBooksList');
+            list.innerHTML = ''; // Limpiar la lista
+
+            librosFiltrados.forEach(libro => {
+                list.innerHTML += `
+                    <li>
+                        <strong>${libro.titulo}</strong><br>
+                        Autor: ${libro.autor}<br>
+                        Género: ${libro.genero}
+                        <button onclick="reservarLibro(${libro.id})">Reservar</button>
+                    </li>
+                `;
+            });
+        }
+
+        // Inicializar la lista de libros disponibles
+        mostrarLibrosDisponibles();

@@ -1,57 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="Estilos.css\estilos.css">
-    <title>Biblioteca</title>
+    <title>Biblioteca Digital</title>
+    <link rel="stylesheet" href="Estilos.css\estilos.css">
 </head>
 <body>
     <header>
-        <nav>
-            <input type="text" placeholder="Buscar">
-            <input type="button" value="Enviar">
-        </nav>
+        <h1>Biblioteca Digital</h1>
+        <input type="text" id="searchInput" placeholder="Buscar libro..." oninput="filtrarLibros()">
     </header>
-    <section>
-        <div>
-            <h1 class="titulo"> Blancanieves</h1>
-            <img class="imagen" src="https://image.cdn0.buscalibre.com/2966507.__RS360x360__.jpg" alt="imagen">
-            <p class="autor"> José Mauro de Vasconcelos</p>
-            <p calss="genero"> Novela</p>
-        </div>
-        <div>
-            <h1 class="titulo"> La casa de papel</h1>
-            <img class="image" src="data:image/jpeg;base64,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" alt="imagen">
-            <p class="autor"> José Mauro de Vasconcelos</p>
-            <p calss="genero"> Novela</p>
-        </div>
-        <div>
-            <h1 class="titulo">Enciclopedia</h1>
-            <img class="imagen" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIi4FRrRyW9dC4rrlCrXW2IqdOAsVBnG7xOg&s" alt="imagen">
-            <p class="autor">Pedro Blseca</p>
-            <p calss="genero">Informativa</p>
-        </div>
-        <div>
-            <h1 class="titulo">Principito</h1>
-            <img class="imagen" src="https://th.bing.com/th/id/OIP.BT0g2DhL1OvXE1EmxInysAHaLd?rs=1&pid=ImgDetMain" alt="imagen">
-            <p class="autor">José Mauro de Vasconcelos</p>
-            <p calss="genero"> Novela</p>
-        </div>
-        <div>
-            <h1 class="titulo">Don Quijote de la Mancha</h1>
-            <img class="image" src="https://th.bing.com/th/id/OIP.p2Qht0iMCaSgQb3wbzHukAHaKN?w=186&h=257&c=7&r=0&o=5&pid=1.7" alt="imagen">
-            <p class="autor">Miguel de Cervantes</p>
-            <p calss="genero"> Novela</p>
-        </div>
-        <div>
-            <h1 class="titulo">La Ilíada</h1>
-            <img class="imagen" src="https://th.bing.com/th/id/R.d6f5bc9fb42fb89cc86569e19377beca?rik=e5AdVX0cFsv5zQ&pid=ImgRaw&r=0" alt="imagen">
-            <p class="autor">Homero</p>
-            <p calss="genero">Informativa</p>
-        </div>
 
+    <section id="availableBooks">
+        <h2>Libros Disponibles</h2>
+        <ul id="availableBooksList"></ul>
     </section>
+
+    <section id="borrowedBooks">
+        <h2>Libros Prestados</h2>
+        <ul id="borrowedBooksList"></ul>
+    </section>
+
+    <div id="notifications"></div>
 
     <script src="DOOM.js"></script>
 </body>
